@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CinemaWeb - Book Movie Tickets</title>
+    <style>
+        :root {
+            --primary: #e50914;
+            --secondary: #221f1f;
+            --light: #f5f5f5;
+            --dark: #141414;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+        }
+        
+        header {
+            background-color: var(--secondary);
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .section-title {
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            border-left: 4px solid var(--primary);
+            padding-left: 0.5rem;
+        }
+        
+        .movies-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 2rem;
+        }
+        
+        .movie-card {
+            background-color: var(--secondary);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .movie-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .movie-poster {
+            height: 300px;
+            width: 100%;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .movie-info {
+            padding: 1rem;
+        }
+        
+        .movie-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .movie-details {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+        
+        .book-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 500;
+        }
+        
+        .book-btn:hover {
+            background-color: #c50812;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            overflow: auto;
+        }
+        
+        .modal-content {
+            background-color: var(--secondary);
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: var(--primary);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+        }
+        
+        .showtime-selector {
+            margin-bottom: 2rem;
+        }
+        
+        .showtime-selector select {
+            padding: 0.5rem;
+            width: 100%;
+            background-color: var(--dark);
+            color: var(--light);
+            border: 1px solid #333;
+            border-radius: 4px;
+        }
+        
+        .seats-container {
+            margin-bottom: 2rem;
+        }
+        
+        .screen {
+            background-color: #333;
+            height: 10px;
+            width: 80%;
+            margin: 0 auto 2rem;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+        
+        .screen-label {
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #aaa;
+        }
+        
+        .seats-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 0.5rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .seat {
+            width: 100%;
+            aspect-ratio: 1/1;
+            background-color: #444;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+        
+        .seat.available {
+            background-color: #444;
+        }
+        
+        .seat.selected {
+            background-color: var(--primary);
+        }
+        
+        .seat.booked {
+            background-color: #222;
+            cursor: not-allowed;
+        }
+        
+        .ticket-summary {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .ticket-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .ticket-total {
+            border-top: 1px solid #444;
+            padding-top: 0.5rem;
+            margin-top: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .confirm-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+        
+        .confirm-btn:hover {
+            background-color: #c50812;
+        }
+        
+        .confirmation {
+            text-align: center;
+            display: none;
+        }
+        
+        .confirmation h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .booking-ref {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 4px;
+            font-size: 1.2rem;
+            margin: 1rem 0;
+        }
+        
+        .login-form {
+            display: none;
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: var(--secondary);
+            padding: 2rem;
+            border-radius: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #333;
+            background-color: var(--dark);
+            color: var(--light);
+            border-radius: 4px;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .toggle-form {
+            color: var(--primary);
+            cursor: pointer;
+        }
+        
+        .account-page {
+            display: none;
+        }
+        
+        .bookings-history {
+            margin-top: 2rem;
+        }
+        
+        .booking-item {
+            background-color: var(--secondary);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        
+        footer {
+            background-color: var(--secondary);
+            padding: 2rem 1rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+        
+        @media (max-width: 768px) {
+            .movies-container {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+            
+            .movie-poster {
+                height: 240px;
+            }
+            
+            .seats-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">CinemaWeb</div>
+            <div class="nav-links">
+                <a href="#" id="home-link">Home</a>
+                <a href="#" id="movies-link">Movies</a>
+                <a href="#" id="account-link">Account</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Movies Section -->
+        <section id="movies-section">
+            <h2 class="section-title">Now Showing</h2>
+            <div class="movies-container" id="movies-grid">
+                <!-- Movies will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Account Section -->
+        <section id="account-section" class="account-page">
+            <h2 class="section-title">My Account</h2>
+            
+            <!-- Login Form -->
+            <div id="login-form" class="login-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password">
+                </div>
+                <div class="form-actions">
+                    <button class="book-btn" id="login-btn">Login</button>
+                    <span class="toggle-form" id="register-toggle">Register instead</span>
+                </div>
+            </div>
+            
+            <!-- Registration Form -->
+            <div id="register-form" class="login-form">
+                <div class="form-group">
+                    <label for="reg-name">Full Name</label>
+                    <input type="text" id="reg-name" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label for="reg-email">Email</label>
+                    <input type="email" id="reg-email" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">Password</label>
+                    <input type="password" id="reg-password" placeholder="Create a password">
+                </div>
+                <div class="form-actions">
+                    <button class="book-btn" id="register-btn">Register</button>
+                    <span class="toggle-form" id="login-toggle">Login instead</span>
+                </div>
+            </div>
+            
+            <!-- User Dashboard -->
+            <div id="user-dashboard" class="login-form">
+                <h3>Welcome, <span id="user-name">User</span>!</h3>
+                
+                <div class="bookings-history">
+                    <h3>Your Bookings</h3>
+                    <div id="bookings-list">
+                        <!-- Bookings will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <button class="book-btn" id="logout-btn" style="margin-top: 2rem;">Logout</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Booking Modal -->
+    <div id="booking-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-movie-title">Movie Title</h2>
+                <span class="close">&times;</span>
+            </div>
+            
+            <!-- Showtime Selector -->
+            <div class="showtime-selector">
+                <h3>Select Showtime</h3>
+                <select id="showtime-select">
+                    <option value="1">Today - 12:30 PM</option>
+                    <option value="2">Today - 3:15 PM</option>
+                    <option value="3">Today - 6:00 PM</option>
+                    <option value="4">Today - 8:45 PM</option>
+                    <option value="5">Tomorrow - 12:30 PM</option>
+                    <option value="6">Tomorrow - 3:15 PM</option>
+                    <option value="7">Tomorrow - 6:00 PM</option>
+                    <option value="8">Tomorrow - 8:45 PM</option>
+                </select>
+            </div>
+            
+            <!-- Seats Selection -->
+            <div class="seats-container">
+                <h3>Select Seats</h3>
+                <p class="screen-label">SCREEN</p>
+                <div class="screen"></div>
+                <div class="seats-grid" id="seats-grid">
+                    <!-- Seats will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Ticket Summary -->
+            <div class="ticket-summary">
+                <h3>Ticket Summary</h3>
+                <div class="ticket-row">
+                    <span>Adult Tickets (x<span id="adult-count">0</span>)</span>
+                    <span>$<span id="adult-total">0</span></span>
+                </div>
+                <div class="ticket-row ticket-total">
+                    <span>Total</span>
+                    <span>$<span id="total-price">0</span></span>
+                </div>
+            </div>
+            
+            <button class="confirm-btn" id="book-tickets-btn">Book Tickets</button>
+            
+            <!-- Confirmation Message -->
+            <div class="confirmation" id="confirmation-message">
+                <h3>Booking Confirmed!</h3>
+                <p>Your tickets have been booked successfully.</p>
+                <div class="booking-ref">
+                    Booking Reference: <span id="booking-reference">CW12345</span>
+                </div>
+                <p>A confirmation has been sent to your email.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>CinemaWeb &copy; 2025 - All Rights Reserved</p>
+    </footer>
+
+    <script>
+        // Sample movie data
+        const movies = [
+            { 
+                id: 1, 
+                title: "Dune: Prophecy", 
+                poster: "/api/placeholder/220/300", 
+                duration: "2h 35m", 
+                genre: "Sci-Fi/Adventure", 
+                rating: "PG-13" 
+            },
+            { 
+                id: 2, 
+                title: "The Avengers: Secret Wars", 
+                poster: "/api/placeholder/220/300", 
+                duration: "2h 45m",
+                genre: "Action/Adventure",
+                rating: "PG-13"
+            },
+            { 
+                id: 3, 
+                title: "Interstellar 2", 
+                poster: "/api/placeholder/220/300", 
+                duration: "3h 05m",
+                genre: "Sci-Fi/Drama",
+                rating: "PG-13"
+            },
+            { 
+                id: 4, 
+                title: "The Last Dance", 
+                poster: "/api/placeholder/220/300", 
+                duration: "1h 55m",
+                genre: "Drama/Romance",
+                rating: "R"
+            },
+            { 
+                id: 5, 
+                title: "Ocean's Edge", 
+                poster: "/api/placeholder/220/300", 
+                duration: "2h 10m",
+                genre: "Thriller/Mystery",
+                rating: "PG-13"
+            },
+            { 
+                id: 6, 
+                title: "The Haunting of Willow Manor", 
+                poster: "/api/placeholder/220/300", 
+                duration: "1h 48m",
+                genre: "Horror/Thriller",
+                rating: "R"
+            }
+        ];
+
+        // Sample user data
+        let currentUser = null;
+        const users = [
+            {
+                id: 1,
+                name: "John Doe",
+                email: "john@example.com",
+                password: "password123",
+                bookings: [
+                    {
+                        id: "CW67890",
+                        movie: "Dune: Prophecy",
+                        showtime: "April 5, 2025 - 6:00 PM",
+                        seats: ["A3", "A4"],
+                        total: 24
+                    }
+                ]
+            }
+        ];
+
+        // DOM Elements
+        const moviesGrid = document.getElementById('movies-grid');
+        const bookingModal = document.getElementById('booking-modal');
+        const modalClose = document.querySelector('.close');
+        const modalMovieTitle = document.getElementById('modal-movie-title');
+        const seatsGrid = document.getElementById('seats-grid');
+        const adultCount = document.getElementById('adult-count');
+        const adultTotal = document.getElementById('adult-total');
+        const totalPrice = document.getElementById('total-price');
+        const bookTicketsBtn = document.getElementById('book-tickets-btn');
+        const confirmationMessage = document.getElementById('confirmation-message');
+        const bookingReference = document.getElementById('booking-reference');
+        
+        // Navigation elements
+        const homeLink = document.getElementById('home-link');
+        const moviesLink = document.getElementById('movies-link');
+        const accountLink = document.getElementById('account-link');
+        const moviesSection = document.getElementById('movies-section');
+        const accountSection = document.getElementById('account-section');
+        
+        // Account elements
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const userDashboard = document.getElementById('user-dashboard');
+        const registerToggle = document.getElementById('register-toggle');
+        const loginToggle = document.getElementById('login-toggle');
+        const loginBtn = document.getElementById('login-btn');
+        const registerBtn = document.getElementById('register-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const userName = document.getElementById('user-name');
+        const bookingsList = document.getElementById('bookings-list');
+        
+        // Initialize
+        function init() {
+            populateMovies();
+            setupSeats();
+            setupEventListeners();
+            checkLoggedInUser();
+        }
+        
+        // Populate movies grid
+        function populateMovies() {
+            movies.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.className = 'movie-card';
+                movieCard.innerHTML = `
+                    <div class="movie-poster" style="background-image: url('${movie.poster}')"></div>
+                    <div class="movie-info">
+                        <h3 class="movie-title">${movie.title}</h3>
+                        <p class="movie-details">${movie.duration} | ${movie.genre} | ${movie.rating}</p>
+                        <button class="book-btn" data-movie-id="${movie.id}">Book Now</button>
+                    </div>
+                `;
+                moviesGrid.appendChild(movieCard);
+            });
+        }
+        
+        // Setup seat selection grid
+        function setupSeats() {
+            const rows = ['A', 'B', 'C', 'D', 'E', 'F'];
+            seatsGrid.innerHTML = '';
+            
+            for (let i = 0; i < rows.length; i++) {
+                for (let j = 1; j <= 8; j++) {
+                    const seatId = `${rows[i]}${j}`;
+                    const isBooked = Math.random() < 0.3; // 30% of seats are randomly booked
+                    
+                    const seat = document.createElement('div');
+                    seat.className = `seat ${isBooked ? 'booked' : 'available'}`;
+                    seat.dataset.seatId = seatId;
+                    seat.textContent = seatId;
+                    
+                    if (!isBooked) {
+                        seat.addEventListener('click', toggleSeat);
+                    }
+                    
+                    seatsGrid.appendChild(seat);
+                }
+            }
+        }
+        
+        // Toggle seat selection
+        function toggleSeat(e) {
+            const seat = e.target;
+            seat.classList.toggle('selected');
+            updateTicketSummary();
+        }
+        
+        // Update ticket summary
+        function updateTicketSummary() {
+            const selectedSeats = document.querySelectorAll('.seat.selected');
+            const count = selectedSeats.length;
+            const price = count * 12; // $12 per ticket
+            
+            adultCount.textContent = count;
+            adultTotal.textContent = price;
+            totalPrice.textContent = price;
+        }
+        
+        // Open booking modal for a movie
+        function openBookingModal(movieId) {
+            const movie = movies.find(m => m.id === parseInt(movieId));
+            modalMovieTitle.textContent = movie.title;
+            setupSeats();
+            updateTicketSummary();
+            confirmationMessage.style.display = 'none';
+            bookTicketsBtn.style.display = 'block';
+            bookingModal.style.display = 'block';
+        }
+        
+        // Check if user is logged in
+        function checkLoggedInUser() {
+            // In a real app, this would check localStorage or cookies
+            const loggedInUserId = localStorage.getItem('currentUserId');
+            if (loggedInUserId) {
+                currentUser = users.find(u => u.id === parseInt(loggedInUserId));
+                if (currentUser) {
+                    updateUserDashboard();
+                }
+            }
+        }
+        
+        // Update user dashboard
+        function updateUserDashboard() {
+            userName.textContent = currentUser.name;
+            
+            // Display bookings
+            bookingsList.innerHTML = '';
+            if (currentUser.bookings.length === 0) {
+                bookingsList.innerHTML = '<p>You have no bookings yet.</p>';
+                return;
+            }
+            
+            currentUser.bookings.forEach(booking => {
+                const bookingItem = document.createElement('div');
+                bookingItem.className = 'booking-item';
+                bookingItem.innerHTML = `
+                    <h4>${booking.movie}</h4>
+                    <p>${booking.showtime}</p>
+                    <p>Seats: ${booking.seats.join(', ')}</p>
+                    <p>Total: $${booking.total}</p>
+                    <p>Booking ID: ${booking.id}</p>
+                `;
+                bookingsList.appendChild(bookingItem);
+            });
+        }
+        
+        // Handle login
+        function handleLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            const user = users.find(u => u.email === email && u.password === password);
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('currentUserId', user.id);
+                updateUserDashboard();
+                showUserDashboard();
+            } else {
+                alert('Invalid email or password');
+            }
+        }
+        
+        // Handle registration
+        function handleRegister() {
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            
+            if (!name || !email || !password) {
+                alert('Please fill all fields');
+                return;
+            }
+            
+            const existingUser = users.find(u => u.email === email);
+            if (existingUser) {
+                alert('Email already registered');
+                return;
+            }
+            
+            const newUser = {
+                id: users.length + 1,
+                name,
+                email,
+                password,
+                bookings: []
+            };
+            
+            users.push(newUser);
+            currentUser = newUser;
+            localStorage.setItem('currentUserId', newUser.id);
+            updateUserDashboard();
+            showUserDashboard();
+        }
+        
+        // Show user dashboard
+        function showUserDashboard() {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'none';
+            userDashboard.style.display = 'block';
+        }
+        
+        // Handle logout
+        function handleLogout() {
+            currentUser = null;
+            localStorage.removeItem('currentUserId');
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'none';
+            userDashboard.style.display = 'none';
+        }
+        
+        // Handle book tickets
+        function handleBookTickets() {
+            if (!currentUser) {
+                alert('Please login to book tickets');
+                navigateTo('account');
+                return;
+            }
+            
+            const selectedSeats = document.querySelectorAll('.seat.selected');
+            if (selectedSeats.length === 0) {
+                alert('Please select at least one seat');
+                return;
+            }
+            
+            const seatIds = Array.from(selectedSeats).map(seat => seat.dataset.seatId);
+            const total = selectedSeats.length * 12;
+            const showtime = document.getElementById('showtime-select').options[
+                document.getElementById('showtime-select').selectedIndex
+            ].text;
+            
+            // Generate a random booking reference
+            const bookingRef = 'CW' + Math.floor(10000 + Math.random() * 90000);
+            
+            // Add booking to user's bookings
+            currentUser.bookings.push({
+                id: bookingRef,
+                movie: modalMovieTitle.textContent,
+                showtime,
+                seats: seatIds,
+                total
+            });
+            
+            // Show confirmation
+            bookingReference.textContent = bookingRef;
+            bookTicketsBtn.style.display = 'none';
+            confirmationMessage.style.display = 'block';
+            
+            // Update dashboard in case it's open
+            updateUserDashboard();
+        }
+        
+        // Navigate to section
+        function navigateTo(section) {
+            if (section === 'home' || section === 'movies') {
+                moviesSection.style.display = 'block';
+                accountSection.style.display = 'none';
+            } else if (section === 'account') {
+                moviesSection.style.display = 'none';
+                accountSection.style.display = 'block';
+                
+                if (currentUser) {
+                    showUserDashboard();
+                } else {
+                    loginForm.style.display = 'block';
+                    registerForm.style.display = 'none';
+                    userDashboard.style.display = 'none';
+                }
+            }
+        }
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            // Movie booking buttons
+            document.querySelectorAll('.book-btn[data-movie-id]').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const movieId = e.target.dataset.movieId;
+                    openBookingModal(movieId);
+                });
+            });
+            
+            // Close modal
+            modalClose.addEventListener('click', () => {
+                bookingModal.style.display = 'none';
+            });
+            
+            // Book tickets button
+            bookTicketsBtn.addEventListener('click', handleBookTickets);
+            
+            // Navigation links
+            homeLink.addEventListener('click', () => navigateTo('home'));
+            moviesLink.addEventListener('click', () => navigateTo('movies'));
+            accountLink.addEventListener('click', () => navigateTo('account'));
+            
+            // Form toggles
+            registerToggle.addEventListener('click', () => {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+            });
+            
+            loginToggle.addEventListener('click', () => {
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            });
+            
+            // Login and register buttons
+            loginBtn.addEventListener('click', handleLogin);
+            registerBtn.addEventListener('click', handleRegister);
+            logoutBtn.addEventListener('click', handleLogout);
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target === bookingModal) {
+                    bookingModal.style.display = 'none';
+                }
+            });
+        }
+        
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>
