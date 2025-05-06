@@ -10,9 +10,6 @@
             --secondary: #221f1f;
             --light: #f5f5f5;
             --dark: #141414;
-            --success: #28a745;
-            --danger: #dc3545;
-            --warning: #ffc107;
         }
         
         * {
@@ -310,7 +307,7 @@
             margin-bottom: 0.5rem;
         }
         
-        .form-group input, .form-group select, .form-group textarea {
+        .form-group input {
             width: 100%;
             padding: 0.8rem;
             border: 1px solid #333;
@@ -352,153 +349,6 @@
             margin-top: 4rem;
         }
         
-        /* Admin Styles */
-        .admin-section {
-            display: none;
-        }
-        
-        .admin-nav {
-            display: flex;
-            margin-bottom: 2rem;
-            background-color: rgba(0, 0, 0, 0.2);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .admin-nav-item {
-            padding: 1rem;
-            cursor: pointer;
-            flex: 1;
-            text-align: center;
-        }
-        
-        .admin-nav-item.active {
-            background-color: var(--primary);
-        }
-        
-        .admin-panel {
-            display: none;
-        }
-        
-        .admin-panel.active {
-            display: block;
-        }
-        
-        .admin-card {
-            background-color: var(--secondary);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .admin-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .admin-card-header h3 {
-            margin: 0;
-        }
-        
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 1rem;
-        }
-        
-        .admin-table th, .admin-table td {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid #444;
-        }
-        
-        .admin-table th {
-            border-bottom: 2px solid #555;
-        }
-        
-        .action-btn {
-            background-color: transparent;
-            border: none;
-            color: var(--light);
-            cursor: pointer;
-            padding: 0.25rem 0.5rem;
-            margin-right: 0.5rem;
-            border-radius: 3px;
-        }
-        
-        .edit-btn {
-            background-color: var(--warning);
-            color: #000;
-        }
-        
-        .delete-btn {
-            background-color: var(--danger);
-        }
-        
-        .add-btn {
-            background-color: var(--success);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 500;
-            margin-bottom: 1.5rem;
-        }
-        
-        .movie-form, .showtime-form {
-            display: none;
-            margin-bottom: 2rem;
-        }
-        
-        .btn-container {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .btn-save {
-            background-color: var(--success);
-        }
-        
-        .btn-cancel {
-            background-color: #555;
-        }
-        
-        .alert {
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-radius: 4px;
-            display: none;
-        }
-        
-        .alert-success {
-            background-color: rgba(40, 167, 69, 0.2);
-            border: 1px solid var(--success);
-            color: var(--success);
-        }
-        
-        .alert-danger {
-            background-color: rgba(220, 53, 69, 0.2);
-            border: 1px solid var(--danger);
-            color: var(--danger);
-        }
-        
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            border-radius: 10px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            margin-left: 0.5rem;
-        }
-        
-        .badge-admin {
-            background-color: var(--primary);
-            color: white;
-        }
-        
         @media (max-width: 768px) {
             .movies-container {
                 grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -510,18 +360,6 @@
             
             .seats-grid {
                 grid-template-columns: repeat(6, 1fr);
-            }
-            
-            .admin-table {
-                font-size: 0.8rem;
-            }
-            
-            .admin-table th, .admin-table td {
-                padding: 0.5rem;
-            }
-            
-            .admin-nav {
-                flex-direction: column;
             }
         }
     </style>
@@ -535,7 +373,6 @@
                 <a href="#" id="home-link">Home</a>
                 <a href="#" id="movies-link">Movies</a>
                 <a href="#" id="account-link">Account</a>
-                <a href="#" id="admin-link" style="display: none;">Admin Panel</a>
             </div>
         </nav>
     </header>
@@ -556,7 +393,6 @@
             
             <!-- Login Form -->
             <div id="login-form" class="login-form">
-                <div class="alert alert-danger" id="login-alert"></div>
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" placeholder="Enter your email">
@@ -573,7 +409,6 @@
             
             <!-- Registration Form -->
             <div id="register-form" class="login-form">
-                <div class="alert alert-danger" id="register-alert"></div>
                 <div class="form-group">
                     <label for="reg-name">Full Name</label>
                     <input type="text" id="reg-name" placeholder="Enter your full name">
@@ -594,7 +429,7 @@
             
             <!-- User Dashboard -->
             <div id="user-dashboard" class="login-form">
-                <h3>Welcome, <span id="user-name">User</span>! <span id="admin-badge" class="badge badge-admin" style="display: none;">ADMIN</span></h3>
+                <h3>Welcome, <span id="user-name">User</span>!</h3>
                 
                 <div class="bookings-history">
                     <h3>Your Bookings</h3>
@@ -606,212 +441,6 @@
                 <button class="book-btn" id="logout-btn" style="margin-top: 2rem;">Logout</button>
             </div>
         </section>
-        
-        <!-- Admin Section -->
-        <section id="admin-section" class="admin-section">
-            <h2 class="section-title">Admin Panel</h2>
-            
-            <div class="admin-nav">
-                <div class="admin-nav-item active" data-panel="movies-panel">Movies Management</div>
-                <div class="admin-nav-item" data-panel="showtimes-panel">Showtimes Management</div>
-                <div class="admin-nav-item" data-panel="bookings-panel">Bookings Management</div>
-                <div class="admin-nav-item" data-panel="users-panel">Users Management</div>
-            </div>
-            
-            <!-- Movies Management Panel -->
-            <div id="movies-panel" class="admin-panel active">
-                <div class="alert alert-success" id="movie-success-alert"></div>
-                <div class="alert alert-danger" id="movie-error-alert"></div>
-                
-                <button class="add-btn" id="add-movie-btn">Add New Movie</button>
-                
-                <!-- Movie Form -->
-                <div id="movie-form" class="movie-form admin-card">
-                    <h3 id="movie-form-title">Add New Movie</h3>
-                    <input type="hidden" id="edit-movie-id">
-                    
-                    <div class="form-group">
-                        <label for="movie-title">Movie Title</label>
-                        <input type="text" id="movie-title" placeholder="Enter movie title">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="movie-duration">Duration</label>
-                        <input type="text" id="movie-duration" placeholder="e.g. 2h 35m">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="movie-genre">Genre</label>
-                        <input type="text" id="movie-genre" placeholder="e.g. Sci-Fi/Adventure">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="movie-rating">Rating</label>
-                        <select id="movie-rating">
-                            <option value="G">G</option>
-                            <option value="PG">PG</option>
-                            <option value="PG-13">PG-13</option>
-                            <option value="R">R</option>
-                            <option value="NC-17">NC-17</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="movie-poster">Poster URL</label>
-                        <input type="text" id="movie-poster" placeholder="Enter poster URL or leave empty for placeholder">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="movie-description">Description</label>
-                        <textarea id="movie-description" rows="4" placeholder="Enter movie description"></textarea>
-                    </div>
-                    
-                    <div class="btn-container">
-                        <button class="book-btn btn-save" id="save-movie-btn">Save Movie</button>
-                        <button class="book-btn btn-cancel" id="cancel-movie-btn">Cancel</button>
-                    </div>
-                </div>
-                
-                <!-- Movies Table -->
-                <div class="admin-card">
-                    <div class="admin-card-header">
-                        <h3>Movies List</h3>
-                    </div>
-                    
-                    <table class="admin-table" id="movies-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Title</th>
-                                <th>Duration</th>
-                                <th>Genre</th>
-                                <th>Rating</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Will be populated by JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <!-- Showtimes Management Panel -->
-            <div id="showtimes-panel" class="admin-panel">
-                <div class="alert alert-success" id="showtime-success-alert"></div>
-                <div class="alert alert-danger" id="showtime-error-alert"></div>
-                
-                <button class="add-btn" id="add-showtime-btn">Add New Showtime</button>
-                
-                <!-- Showtime Form -->
-                <div id="showtime-form" class="showtime-form admin-card">
-                    <h3 id="showtime-form-title">Add New Showtime</h3>
-                    <input type="hidden" id="edit-showtime-id">
-                    
-                    <div class="form-group">
-                        <label for="showtime-movie">Movie</label>
-                        <select id="showtime-movie">
-                            <!-- Will be populated by JavaScript -->
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="showtime-date">Date</label>
-                        <input type="date" id="showtime-date">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="showtime-time">Time</label>
-                        <input type="time" id="showtime-time">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="showtime-price">Ticket Price ($)</label>
-                        <input type="number" id="showtime-price" min="1" step="0.01" placeholder="e.g. 12.00">
-                    </div>
-                    
-                    <div class="btn-container">
-                        <button class="book-btn btn-save" id="save-showtime-btn">Save Showtime</button>
-                        <button class="book-btn btn-cancel" id="cancel-showtime-btn">Cancel</button>
-                    </div>
-                </div>
-                
-                <!-- Showtimes Table -->
-                <div class="admin-card">
-                    <div class="admin-card-header">
-                        <h3>Showtimes List</h3>
-                    </div>
-                    
-                    <table class="admin-table" id="showtimes-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Movie</th>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Price</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Will be populated by JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <!-- Bookings Management Panel -->
-            <div id="bookings-panel" class="admin-panel">
-                <div class="admin-card">
-                    <div class="admin-card-header">
-                        <h3>All Bookings</h3>
-                    </div>
-                    
-                    <table class="admin-table" id="bookings-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>User</th>
-                                <th>Movie</th>
-                                <th>Showtime</th>
-                                <th>Seats</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Will be populated by JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <!-- Users Management Panel -->
-            <div id="users-panel" class="admin-panel">
-                <div class="alert alert-success" id="user-success-alert"></div>
-                <div class="alert alert-danger" id="user-error-alert"></div>
-                
-                <div class="admin-card">
-                    <div class="admin-card-header">
-                        <h3>Users List</h3>
-                    </div>
-                    
-                    <table class="admin-table" id="users-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Will be populated by JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
     </main>
 
     <!-- Booking Modal -->
@@ -819,15 +448,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title" id="modal-movie-title">Movie Title</h2>
-                <span class="close">&times;</span>
+                <span class="close">×</span>
             </div>
             
             <!-- Showtime Selector -->
             <div class="showtime-selector">
                 <h3>Select Showtime</h3>
-                <select id="showtime-select">
-                    <!-- Will be populated by JavaScript based on movie -->
-                </select>
+                <select id="showtime-select"></select>
             </div>
             
             <!-- Seats Selection -->
@@ -844,7 +471,7 @@
             <div class="ticket-summary">
                 <h3>Ticket Summary</h3>
                 <div class="ticket-row">
-                    <span>Tickets (x<span id="adult-count">0</span>)</span>
+                    <span>Adult Tickets (x<span id="adult-count">0</span>)</span>
                     <span>$<span id="adult-total">0</span></span>
                 </div>
                 <div class="ticket-row ticket-total">
@@ -869,364 +496,13 @@
 
     <!-- Footer -->
     <footer>
-        <p>CinemaWeb &copy; 2025 - All Rights Reserved</p>
+        <p>CinemaWeb © 2025 - All Rights Reserved</p>
     </footer>
 
-<script>
-// Database with localStorage
-let movies = JSON.parse(localStorage.getItem('movies')) || [
-    { id: 1, title: "Dune: Prophecy", poster: "/api/placeholder/220/300", duration: "2h 35m", genre: "Sci-Fi/Adventure", rating: "PG-13", description: "The prequel series to the acclaimed Dune franchise." },
-    { id: 2, title: "The Avengers: Secret Wars", poster: "/api/placeholder/220/300", duration: "2h 45m", genre: "Action/Adventure", rating: "PG-13", description: "The Avengers face their greatest threat yet." }
-];
+    <!-- Admin Panel -->
+    <div id="admin-panel"></div>
 
-let showtimes = JSON.parse(localStorage.getItem('showtimes')) || [
-    { id: 1, movieId: 1, date: "2025-04-09", time: "12:30", price: 12.00 },
-    { id: 2, movieId: 1, date: "2025-04-09", time: "15:15", price: 12.00 }
-];
-
-let users = JSON.parse(localStorage.getItem('users')) || [
-    { id: 1, name: "John Doe", email: "john@example.com", password: "Passw0rd!", isAdmin: true },
-    { id: 2, name: "Jane Smith", email: "jane@example.com", password: "Passw0rd!", isAdmin: false }
-];
-
-let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
-
-let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
-
-// Save to localStorage
-function saveToLocalStorage() {
-    localStorage.setItem('movies', JSON.stringify(movies));
-    localStorage.setItem('showtimes', JSON.stringify(showtimes));
-    localStorage.setItem('users', JSON.stringify(users));
-    localStorage.setItem('bookings', JSON.stringify(bookings));
-    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-}
-
-// DOM Elements (unchanged)
-const moviesGrid = document.getElementById('movies-grid');
-const bookingModal = document.getElementById('booking-modal');
-// ... (other DOM elements remain the same)
-
-// Initialize
-function init() {
-    displayMovies();
-    setupEventListeners();
-    updateUI();
-    setupAdminPanel();
-}
-
-// Password validation
-function isPasswordValid(password) {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-    return regex.test(password);
-}
-
-// Existing functions (slightly modified for localStorage)
-function displayMovies() {
-    moviesGrid.innerHTML = '';
-    movies.forEach(movie => {
-        const movieCard = document.createElement('div');
-        movieCard.className = 'movie-card';
-        movieCard.innerHTML = `
-            <div class="movie-poster" style="background-image: url('${movie.poster}')"></div>
-            <div class="movie-info">
-                <h3 class="movie-title">${movie.title}</h3>
-                <div class="movie-details">${movie.duration} | ${movie.genre} | ${movie.rating}</div>
-                <button class="book-btn" data-movie-id="${movie.id}">Book Now</button>
-            </div>
-        `;
-        moviesGrid.appendChild(movieCard);
-    });
-}
-
-function handleRegister() {
-    const name = document.getElementById('reg-name').value;
-    const email = document.getElementById('reg-email').value;
-    const password = document.getElementById('reg-password').value;
-    const alert = document.getElementById('register-alert');
-
-    if (!isPasswordValid(password)) {
-        alert.textContent = 'Password must be 8+ characters with uppercase, lowercase, number, and special character';
-        alert.style.display = 'block';
-        return;
-    }
-
-    if (users.some(u => u.email === email)) {
-        alert.textContent = 'Email already registered';
-        alert.style.display = 'block';
-        return;
-    }
-
-    const newUser = { id: users.length + 1, name, email, password, isAdmin: false };
-    users.push(newUser);
-    currentUser = newUser;
-    saveToLocalStorage();
-    updateUI();
-}
-
-function handleLogin() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const alert = document.getElementById('login-alert');
-
-    const user = users.find(u => u.email === email && u.password === password);
-    if (user) {
-        currentUser = user;
-        saveToLocalStorage();
-        updateUI();
-    } else {
-        alert.textContent = 'Invalid credentials';
-        alert.style.display = 'block';
-    }
-}
-
-function handleLogout() {
-    currentUser = null;
-    saveToLocalStorage();
-    updateUI();
-}
-
-// Admin Panel Setup
-function setupAdminPanel() {
-    // Admin navigation
-    document.querySelectorAll('.admin-nav-item').forEach(item => {
-        item.addEventListener('click', () => {
-            document.querySelectorAll('.admin-nav-item').forEach(i => i.classList.remove('active'));
-            document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
-            item.classList.add('active');
-            document.getElementById(item.dataset.panel).classList.add('active');
-        });
-    });
-
-    // Movies Management
-    document.getElementById('add-movie-btn').addEventListener('click', () => showMovieForm());
-    document.getElementById('save-movie-btn').addEventListener('click', saveMovie);
-    document.getElementById('cancel-movie-btn').addEventListener('click', hideMovieForm);
-    displayMoviesTable();
-
-    // Showtimes Management
-    document.getElementById('add-showtime-btn').addEventListener('click', () => showShowtimeForm());
-    document.getElementById('save-showtime-btn').addEventListener('click', saveShowtime);
-    document.getElementById('cancel-showtime-btn').addEventListener('click', hideShowtimeForm);
-    displayShowtimesTable();
-
-    // Users Management
-    displayUsersTable();
-}
-
-// Movies CRUD
-function showMovieForm(movie = null) {
-    const form = document.getElementById('movie-form');
-    document.getElementById('movie-form-title').textContent = movie ? 'Edit Movie' : 'Add New Movie';
-    document.getElementById('edit-movie-id').value = movie ? movie.id : '';
-    document.getElementById('movie-title').value = movie ? movie.title : '';
-    document.getElementById('movie-duration').value = movie ? movie.duration : '';
-    document.getElementById('movie-genre').value = movie ? movie.genre : '';
-    document.getElementById('movie-rating').value = movie ? movie.rating : 'G';
-    document.getElementById('movie-poster').value = movie ? movie.poster : '';
-    document.getElementById('movie-description').value = movie ? movie.description : '';
-    form.style.display = 'block';
-}
-
-function hideMovieForm() {
-    document.getElementById('movie-form').style.display = 'none';
-}
-
-function saveMovie() {
-    const id = document.getElementById('edit-movie-id').value;
-    const movie = {
-        id: id ? parseInt(id) : movies.length + 1,
-        title: document.getElementById('movie-title').value,
-        duration: document.getElementById('movie-duration').value,
-        genre: document.getElementById('movie-genre').value,
-        rating: document.getElementById('movie-rating').value,
-        poster: document.getElementById('movie-poster').value || '/api/placeholder/220/300',
-        description: document.getElementById('movie-description').value
-    };
-
-    if (id) {
-        movies = movies.map(m => m.id === movie.id ? movie : m);
-    } else {
-        movies.push(movie);
-    }
-
-    saveToLocalStorage();
-    displayMovies();
-    displayMoviesTable();
-    hideMovieForm();
-    showAlert('movie-success-alert', 'Movie saved successfully');
-}
-
-function displayMoviesTable() {
-    const tbody = document.querySelector('#movies-table tbody');
-    tbody.innerHTML = '';
-    movies.forEach(movie => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${movie.id}</td>
-            <td>${movie.title}</td>
-            <td>${movie.duration}</td>
-            <td>${movie.genre}</td>
-            <td>${movie.rating}</td>
-            <td>
-                <button class="action-btn edit-btn" data-id="${movie.id}">Edit</button>
-                <button class="action-btn delete-btn" data-id="${movie.id}">Delete</button>
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
-
-    tbody.addEventListener('click', (e) => {
-        const id = parseInt(e.target.dataset.id);
-        if (e.target.classList.contains('edit-btn')) {
-            const movie = movies.find(m => m.id === id);
-            showMovieForm(movie);
-        } else if (e.target.classList.contains('delete-btn')) {
-            if (confirm('Are you sure you want to delete this movie?')) {
-                movies = movies.filter(m => m.id !== id);
-                showtimes = showtimes.filter(st => st.movieId !== id);
-                bookings = bookings.filter(b => b.movieId !== id);
-                saveToLocalStorage();
-                displayMovies();
-                displayMoviesTable();
-                displayShowtimesTable();
-                showAlert('movie-success-alert', 'Movie deleted successfully');
-            }
-        }
-    });
-}
-
-// Showtimes CRUD
-function showShowtimeForm(showtime = null) {
-    const form = document.getElementById('showtime-form');
-    const movieSelect = document.getElementById('showtime-movie');
-    movieSelect.innerHTML = movies.map(m => `<option value="${m.id}" ${showtime?.movieId === m.id ? 'selected' : ''}>${m.title}</option>`).join('');
-    
-    document.getElementById('showtime-form-title').textContent = showtime ? 'Edit Showtime' : 'Add New Showtime';
-    document.getElementById('edit-showtime-id').value = showtime ? showtime.id : '';
-    document.getElementById('showtime-date').value = showtime ? showtime.date : '';
-    document.getElementById('showtime-time').value = showtime ? showtime.time : '';
-    document.getElementById('showtime-price').value = showtime ? showtime.price : '';
-    form.style.display = 'block';
-}
-
-function hideShowtimeForm() {
-    document.getElementById('showtime-form').style.display = 'none';
-}
-
-function saveShowtime() {
-    const id = document.getElementById('edit-showtime-id').value;
-    const showtime = {
-        id: id ? parseInt(id) : showtimes.length + 1,
-        movieId: parseInt(document.getElementById('showtime-movie').value),
-        date: document.getElementById('showtime-date').value,
-        time: document.getElementById('showtime-time').value,
-        price: parseFloat(document.getElementById('showtime-price').value)
-    };
-
-    if (id) {
-        showtimes = showtimes.map(st => st.id === showtime.id ? showtime : st);
-    } else {
-        showtimes.push(showtime);
-    }
-
-    saveToLocalStorage();
-    displayShowtimesTable();
-    hideShowtimeForm();
-    showAlert('showtime-success-alert', 'Showtime saved successfully');
-}
-
-function displayShowtimesTable() {
-    const tbody = document.querySelector('#showtimes-table tbody');
-    tbody.innerHTML = '';
-    showtimes.forEach(st => {
-        const movie = movies.find(m => m.id === st.movieId);
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${st.id}</td>
-            <td>${movie?.title || 'N/A'}</td>
-            <td>${st.date}</td>
-            <td>${st.time}</td>
-            <td>$${st.price.toFixed(2)}</td>
-            <td>
-                <button class="action-btn edit-btn" data-id="${st.id}">Edit</button>
-                <button class="action-btn delete-btn" data-id="${st.id}">Delete</button>
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
-
-    tbody.addEventListener('click', (e) => {
-        const id = parseInt(e.target.dataset.id);
-        if (e.target.classList.contains('edit-btn')) {
-            const showtime = showtimes.find(st => st.id === id);
-            showShowtimeForm(showtime);
-        } else if (e.target.classList.contains('delete-btn')) {
-            if (confirm('Are you sure you want to delete this showtime?')) {
-                showtimes = showtimes.filter(st => st.id !== id);
-                bookings = bookings.filter(b => b.showtimeId !== id);
-                saveToLocalStorage();
-                displayShowtimesTable();
-                showAlert('showtime-success-alert', 'Showtime deleted successfully');
-            }
-        }
-    });
-}
-
-// Users CRUD
-function displayUsersTable() {
-    const tbody = document.querySelector('#users-table tbody');
-    tbody.innerHTML = '';
-    users.forEach(user => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${user.id}</td>
-            <td>${user.name}</td>
-            <td>${user.email}</td>
-            <td>${user.isAdmin ? 'Admin' : 'User'}</td>
-            <td>
-                <button class="action-btn edit-btn" data-id="${user.id}" ${user.id === currentUser?.id ? 'disabled' : ''}>Toggle Admin</button>
-                <button class="action-btn delete-btn" data-id="${user.id}" ${user.id === currentUser?.id ? 'disabled' : ''}>Delete</button>
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
-
-    tbody.addEventListener('click', (e) => {
-        const id = parseInt(e.target.dataset.id);
-        if (e.target.classList.contains('edit-btn')) {
-            const user = users.find(u => u.id === id);
-            user.isAdmin = !user.isAdmin;
-            saveToLocalStorage();
-            displayUsersTable();
-            showAlert('user-success-alert', `User ${user.name} role updated`);
-        } else if (e.target.classList.contains('delete-btn')) {
-            if (confirm('Are you sure you want to delete this user?')) {
-                users = users.filter(u => u.id !== id);
-                bookings = bookings.filter(b => b.userId !== id);
-                saveToLocalStorage();
-                displayUsersTable();
-                showAlert('user-success-alert', 'User deleted successfully');
-            }
-        }
-    });
-}
-
-// Utility function for alerts
-function showAlert(alertId, message) {
-    const alert = document.getElementById(alertId);
-    alert.textContent = message;
-    alert.style.display = 'block';
-    setTimeout(() => alert.style.display = 'none', 3000);
-}
-
-// Existing event listeners setup (unchanged except for admin)
-function setupEventListeners() {
-    // ... (previous event listeners remain the same)
-}
-
-// Start the application
-init();
-</script>
+    <script src="script.js">
+    </script>
 </body>
 </html>
